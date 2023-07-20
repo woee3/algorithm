@@ -1,8 +1,7 @@
 import sys
 n = int(sys.stdin.readline())
 
-s = 1
-prime_num = [2,3,5,7]
+prime_num = [2, 3, 5, 7]
 for _ in range(n-1):
     temp = []
     for num in prime_num:
