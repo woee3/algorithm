@@ -6,46 +6,31 @@ for i in range(n):
     temp = list(map(int, sys.stdin.readline().split()))
     maps.append(temp)
 
-start = []
+que = deque()
+visited = [[0] * m for _ in range(n)]
+
 for i in range(n):
     for j in range(m):
         if maps[i][j] == 2:
             maps[i][j] = 0
-            start = [i, j]
-        if maps[i][j] == 1:
+            que.append([i, j])
+            visited[i][j] = 1
+        elif maps[i][j] == 1:
             maps[i][j] = -1
 
+
 move = [[0,1], [0,-1], [1,0], [-1,0]]
-visited = [[0] * m for _ in range(n)]
-maps[start[0]][start[1]] = 1
-que = deque()
-for move_i, move_j in move:
-    new_i = start[0] + move_i
-    new_j = start[1] + move_j
-    if new_i < 0 or new_i >= n or new_j < 0 or new_j >= m:
-        continue
-    maps[new_i][new_j] = 1
-    visited[new_i][new_j] = 1
-    que.append([new_i, new_j])
 
 while que:
-    i, j = que.popleft()
-    for move_i, move_j in move:
-        new_i = i + move_i
-        new_j = j + move_j
-        if new_i < 0 or new_i >= n or new_j < 0 or new_j >= m:
-            continue
-        if visited[new_i][new_j] == 1:
-            continue
-        visited[new_i][new_j] = 1
-        temp = []
-        for m_i, m_j in move:
-            if maps[i + m_i][j + m_j] > 0:
-                temp.append(maps[i + m_i][j + m_j])
-        if temp:
-            maps[new_i][new_j] = min(temp) + 1
+    y, x = que.popleft()
+    for i, j in move:
+        n_y, n_x = y-i, x-j
+        if 0 <= n_y < n and 0 <= n_x < m and not visited[n_y][n_x] and maps[n_y][n_x] == -1:
+            que.append([n_y, n_x])
+            maps[n_y][n_x] = maps[y][x] + 1
+            visited[y][x] = 1
 
-
-
-for k in maps:
-    print(k)
+for i in maps:
+    for j in i:
+        print(j, end=" ")
+    print()
