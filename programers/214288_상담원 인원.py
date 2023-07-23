@@ -14,7 +14,7 @@ def con(k, c, cnt, n=0):
 
 def solution(k, n, reqs):
     global consultant
-    answer = []
+    answer = float("inf")
     consult_time = deque([[] for _ in range(k + 1)])
     consult_length = deque([[] for _ in range(k + 1)])
     for a, b, c in reqs:
@@ -24,7 +24,7 @@ def solution(k, n, reqs):
     con(k, [1]*(k+1), n-k)
     for q in consultant:
         print(q)
-        wait_time_list = []
+        total_wait_time = 0
         for i in range(1, k + 1):
             time = 0
             temp_time = deque(consult_time[i])
@@ -49,8 +49,10 @@ def solution(k, n, reqs):
                 # print(time, wait_time)
                 # print("con", consulting)
                 # print("wait", wait)
-            wait_time_list.append(wait_time)
-        answer.append(sum(wait_time_list))
-    return min(answer)
+            total_wait_time += wait_time
+        if answer > total_wait_time:
+            answer = total_wait_time
+
+    return answer
 
 print(solution(2, 3, [[5, 55, 2], [10, 90, 2], [20, 40, 2], [50, 45, 2], [100, 50, 2]]))
