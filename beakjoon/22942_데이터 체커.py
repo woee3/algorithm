@@ -10,18 +10,19 @@ for i in range(n):
 
 circles.sort()
 
-stack = []
-for x, con in circles:
+stack = [circles[0]]
+for i in range(n*2):
     if not stack:
-        stack.append((x, con))
-    elif stack[-1][0] == x:
+        stack.append(circles[i])
+    elif circles[i-1][0] == circles[i][0]:
         answer = "NO"
         break
-    elif stack[-1][1] + con == 0:
+    elif circles[i][1] > 0 and stack[-1][1] + circles[i][1] != 0:
+        answer = "NO"
+        break
+    elif stack[-1][1] + circles[i][1] == 0:
         stack.pop()
     else:
-        stack.append((x, con))
+        stack.append(circles[i])
 
-if stack:
-    answer = "NO"
 print(answer)
