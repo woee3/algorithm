@@ -1,8 +1,8 @@
 from collections import deque
 
 def solution(n, edge):
-    answer = 0
-    cnt = 0
+    answer = 0 # 최장 거리 노드의 개수
+    cnt = 0 # 최장 거리
     graph = [[] for _ in range(n + 1)]
     visited = [0] * (n + 1)
     for a, b in edge:
