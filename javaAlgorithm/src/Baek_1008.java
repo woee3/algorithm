@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class baek_1008 {
+public class Baek_1008 {
     public static void main (String[] arg) {
         Scanner sc = new Scanner(System.in);
         long a = sc.nextInt();
