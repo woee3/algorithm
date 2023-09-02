@@ -1,10 +1,25 @@
-prime_nums = [2]
-for i in range(3, 5000000, 2):
-    prime  = True
-    for k in range(2, int(i**(0.5))+1):
-        if i % k == 0:
-            prime = False
-            break
-    if prime:
-        prime_nums.append(i)
-    print(prime_nums)
+def solution(e, starts):
+    dp = [0] * (e + 1)
+    count = [0] * (e + 1)
+    for i in range(2, e + 1):
+        for j in range(1, min(e // i + 1, i)):
+            count[i * j] += 2
+    for i in range(1, int(e ** (1 / 2)) + 1):
+        count[i ** 2] += 1
+
+    # for i in range(1, e+1):
+    #     for j in range(i, e+1, i):
+    #         count[j] += 1
+
+    max_cnt = 0
+    for i in range(e, 0, -1):
+        if count[i] >= max_cnt:
+            dp[i] = i
+            max_cnt = count[i]
+        else:
+            dp[i] = dp[i + 1]
+
+    answer = [0] * len(starts)
+    for i in range(len(starts)):
+        answer[i] = dp[starts[i]]
+    return answer
