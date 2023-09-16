@@ -1,53 +1,57 @@
-import heapq
-from collections import deque
+import sys
+
+limit_number = 10000000
+sys.setrecursionlimit(limit_number)
+
+
 def solution(n, lighthouse):
+    global answer
     answer = 0
     graph = [[] for _ in range(n + 1)]
-    connection = [[0, i] for i in range(n+1)]
     for s, e in lighthouse:
         graph[s].append(e)
         graph[e].append(s)
-        connection[s][0] -= 1
-        connection[e][0] -= 1
-    heapq.heapify(connection)
-    light = [0] * (n+1)
-    def determine():
-        que = deque([1])
-        visited = [0] * (n+1)
-        while que:
-            now = que.pop()
-            lighting = False
-            if light[now] == 1:
-                lighting = True
-            for node in graph[now]:
-                if light[node] == 1:
-                    lighting = True
-                if not visited[node]:
-                    visited[node] = 1
-                    que.append(node)
-            if not lighting:
-                return False
-        return True
+    tree = {}
+    for i in range(1, n + 1):
+        tree[i] = {}
+        tree[i]["p"] = 0
+        tree[i]["c"] = set()
 
-    cnt = 0
-    less = [0] * (n+1)
-    for _ in range(n):
-        c, h = 0, 0
-        while True:
-            c, h = heapq.heappop(connection)
-            if less[h] > 0:
-                c += less[h]
-                heapq.heappush(connection, [c, h])
-                less[h] = 0
-            else:
-                break
-        cnt -= (c-1)
+    def makeTree(node):
+        for i in graph[node]:
+            if tree[node]["p"] == i:
+                continue
+            tree[i]["p"] = node
+            tree[node]["c"].add(i)
+            makeTree(i)
+
+    makeTree(1)
+
+    def checkGrand(node):
+        global answer
+        if node == 0:
+            return
+        if len(tree[node]["c"]) == 0:
+            checkGrand(tree[node]["p"])
+            return
+        for i in tree[node]["c"]:
+            if len(tree[i]["c"]) != 0:
+                checkGrand(i)
+                return
+
         answer += 1
-        light[h] = 1
-        for i in graph[h]:
-            less[i] += 1
-        if cnt >= n and determine():
-            return answer
+        if tree[node]["p"] != 0:
+            tree[tree[node]["p"]]["c"].remove(node)
+            checkGrand(tree[node]["p"])
+        print(node)
+        print(tree)
+        return
 
+    checkGrand(1)
 
-print(solution(10, [[4, 1], [5, 1], [5, 6], [7, 6], [1, 2], [1, 3], [6, 8], [2, 9], [9, 10]]))
+    return answer
+
+inp = []
+for i in range(1,99999):
+    inp.append([i, i+1])
+print(solution(11, [[1, 2], [2, 5], [1, 4], [4, 6], [1, 3], [3, 7], [7, 8],[1,9],[9,10],[10,11]]))
