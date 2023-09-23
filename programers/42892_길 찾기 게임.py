@@ -19,20 +19,21 @@ def solution(nodeinfo):
             else:
                 now = root
                 temp = root
+                left = True
                 while temp:
-                    left = True
+                    now = temp
                     if x < tree[now]["loc"]:
                         temp = tree[now]["left"]
+                        left = True
                     else:
                         temp = tree[now]["right"]
                         left = False
-                    if not temp:
-                        if left:
-                            tree[now]["left"] = node
-                        else:
-                            tree[now]["right"] = node
-                        tree[node] = {"p": now, "left": 0, "right": 0, "loc": x}
-                    now = temp
+                if left:
+                    tree[now]["left"] = node
+                else:
+                    tree[now]["right"] = node
+                tree[node] = {"p": now, "left": 0, "right": 0, "loc": x}
+
     temp = []
 
     def preorder(root):
@@ -56,4 +57,4 @@ def solution(nodeinfo):
     answer.append(temp)
     return answer
 
-print(solution([[0,0]]))
+print(solution([[5,3],[11,5],[13,3],[3,5],[6,1],[1,3],[8,6],[7,2],[2,2]]))
