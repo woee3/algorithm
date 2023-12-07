@@ -1,29 +1,33 @@
 import sys
+
+sys.setrecursionlimit(10000)
+
+def determine(w, s):
+    i = 0
+
+    while i < len(w) and i < len(s) and (w[i] == "?" or w[i] == s[i]):
+        i += 1
+
+    if i == len(w):
+        return bool(i == len(s))
+
+    if w[i] == "*":
+        for l in range(i, max(len(w),len(s))):
+            if determine(w[i+1:], s[l+1:]):
+                return True
+    return False
+
 answer = []
 case = int(sys.stdin.readline())
-print(case)
 for _ in range(case):
-    word = list(sys.stdin.readline().strip())
+    w = list(sys.stdin.readline().strip())
+
     n = int(sys.stdin.readline())
-    print("n = " + str(n))
-    print(word)
+
     for _ in range(n):
-        new = list(sys.stdin.readline().strip())
-        i = 0
-        j = 0
-        match = True
-        star = False
-        while i < len(word) and j < len(new):
-            if word[i] == "*":
-                if i == len(word)-1:
-                    break
-                star = True
-                i += 1
-
-            if word[i] == new[j]:
-                i += 1
-                j += 1
-            elif word[i] == "?":
-                i += 1
-                j += 1
-
+        s = list(sys.stdin.readline().strip())
+        if determine(w, s):
+            answer.append("".join(s))
+answer.sort()
+for a in answer:
+    print(a)
