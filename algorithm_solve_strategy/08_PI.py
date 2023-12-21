@@ -34,10 +34,28 @@ for _ in range(c):
     dp[2] = determine(numbers, 2, 3)
     dp[3] = determine(numbers, 3, 4)
     dp[4] = determine(numbers, 4, 5)
+
+
     for i in range(5, len(numbers)):
         for k in range(3, 6):
             dp[i] = min(dp[i], determine(numbers, i, k) + dp[i-k])
     answer.append(dp[-1])
+    # i = float("INF")
+    # dp = [-1] * 10002
+    # def mem(n):
+    #     if n == len(numbers):
+    #         return 0
+    #     ret = dp[n]
+    #     if ret != -1:
+    #         return ret
+    #
+    #     ret = float("INF")
+    #     for l in range(3, 6):
+    #         if n + l <= len(numbers):
+    #             ret = min(ret, mem(n+l) + determine(numbers, n+l-1, l))
+    #     dp[n] = ret
+    #     return ret
+    # mem(0)
+    # answer.append(dp[0])
 for a in answer:
     print(a)
-
